@@ -8,8 +8,8 @@ class HomebrewDbc < Formula
   version "0.1.0"
 
   on_macos do
-    url "https://github.com/birdiecare/homebrew-dbc/releases/download/v0.1.0/birdiecare_dbc_0.1.0_darwin_x86_64.tar.gz"
-    sha256 "05cd9f915961f52e4a957385f78bed74a609c189b1e4125dd6ef485a16e3424e"
+    url "https://github.com/birdiecare/homebrew-dbc/archive/v0.3.10.tar.gz"
+    sha256 "4c9fbe17e79013748d894b0edc876768819d4be5002c3b02cafd4737db060649"
 
     def install
       bin.install "homebrew-dbc"
