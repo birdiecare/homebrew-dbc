@@ -75,11 +75,14 @@ Or... If you're very fancy:
 
 `export PGPASSWORD=${token} && psql -h localhost -p 5432 -U ${user} -d ${db}`
 
-## exit status `255`
+## exit status `254`/`255`
 
-If you're experiencing trouble opening a session, and you're recieving a `255` error, it's likely due to a missing AWS SSM Plugin installation.
+If you're experiencing trouble opening a session, and you're recieving a `254`/`255` error, it's likely due to a missing AWS SSM Plugin installation.
 
 Run this handy script! (Installs the plugin)
 
 `wget -O - https://raw.githubusercontent.com/birdiecare/homebrew-dbc/main/install_ssm_plugin.sh | sh`
 
+Or OSX:
+
+`curl https://raw.githubusercontent.com/birdiecare/homebrew-dbc/main/install_ssm_plugin.sh | sh`
