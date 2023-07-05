@@ -75,9 +75,40 @@ Or... If you're very fancy:
 
 `export PGPASSWORD=${token} && psql -h localhost -p 5432 -U ${user} -d ${db}`
 
-## exit status `254`/`255`
+# Gotchas
 
-If you're experiencing trouble opening a session, and you're recieving a `254`/`255` error, it's likely due to a missing AWS SSM Plugin installation.
+## Ensuring your credentials
+
+At times you may find that your use of DBC is interrupted by `sts caller-identity` errors. This is because `dbc` uses the `sts` endpoint to verify your AWS credentials before fetching any RDS endpoints or allowing any SSM sessions. If you’re finding yourself strugging with these, try the following steps:
+
+Make sure you always log in with your sso profile e.g:
+
+```jsx
+aws sso login --profile prod
+```
+
+Always export your profile, or use a tool like [granted](https://www.granted.dev/) to manage your profile setting:
+
+```jsx
+export AWS_PROFILE=prod-read
+```
+
+Check your AWS caller identity outside of `dbc` first:
+
+```jsx
+aws sts get-caller-identity
+```
+
+Ensure you have set your AWS region for your profiles:
+
+```jsx
+vim ~/.aws/config
+add a region to the necessary profiles
+```
+
+## Exit status `255` / `254`
+
+If you're experiencing trouble opening a session, and you're recieving a `255` error, it's likely due to a missing AWS SSM Plugin installation.
 
 Run this handy script! (Installs the plugin)
 
