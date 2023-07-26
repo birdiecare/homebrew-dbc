@@ -12,7 +12,7 @@ import (
 
 var proxyPort string
 
-// proxyCommand represents the connect command
+// proxyCommand represents the proxy command
 var proxyCommand = &cobra.Command{
 	Use:   "proxy",
 	Short: "Open a SOCKS5 proxy to our private infrastructure",
@@ -30,7 +30,7 @@ Then connect to the DB using a Postgres client that supports SOCKS5 proxies by s
 
 Use a custom local port:
 
-	db proxy -l 1081
+	db proxy -p 1081
 
 `,
 

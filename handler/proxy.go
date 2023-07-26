@@ -18,6 +18,7 @@ func Proxy(proxyPort string) {
 	}
 
 	// Fetch content of private key from AWS Secrets Manager
+
 	svc := secretsmanager.NewFromConfig(cfg)
 
 	secretName := "bastion-ssh-key"
@@ -31,6 +32,7 @@ func Proxy(proxyPort string) {
 	}
 
 	// Write private key to temp file
+
 	file, err := os.CreateTemp("", "")
 
 	if err != nil {
@@ -39,11 +41,13 @@ func Proxy(proxyPort string) {
 
 	log.Println("Downloaded private key file to:", file.Name())
 
+	// Remove the file when the program exits
 	defer os.Remove(file.Name())
 
 	file.WriteString(*res.SecretString)
 
 	// Find bastion instance
+
 	bastion := getBastion()
 
 	args := []string{
