@@ -30,6 +30,10 @@ func getBastion() string {
 				Name:   aws.String("tag:service"),
 				Values: []string{"bastion"},
 			},
+			{
+				Name:   aws.String("instance-state-name"),
+				Values: []string{"running"},
+			},
 		},
 	}
 
