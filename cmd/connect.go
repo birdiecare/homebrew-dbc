@@ -53,6 +53,9 @@ Then paste the token`,
 	Run: func(cmd *cobra.Command, args []string) {
 		flag.Parse()
 
+		// Assert AWS Creds
+		handler.AssertCredentials()
+
 		if host == "" {
 			host = handler.FuzzEndpoints(iam)
 		}
@@ -77,9 +80,6 @@ Then paste the token`,
 
 func init() {
 	rootCmd.AddCommand(connectCmd)
-
-	// Assert AWS Creds
-	handler.AssertCredentials()
 
 	//Flags
 	connectCmd.Flags().StringVarP(&host, "host", "H", "", "Hostname of the Database to open a connection to. If a hostname is not provided, a fuzzyfind list with be presented to select a database, and subsequently, a user to connect to`")
