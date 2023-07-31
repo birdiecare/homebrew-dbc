@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -33,14 +33,14 @@ func createSession(t string, h string, p string, lp string) {
 
 	command := exec.Command("aws", args...)
 
-	stderr, err := command.StderrPipe()
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+
+	log.Printf("Opening connection on localhost:%s", lp)
+
+	err = command.Run()
+
 	if err != nil {
-		log.Panic(err.Error())
+		log.Panic("failed to open port-forwarding connection: " + err.Error())
 	}
-
-	log.Printf("Connection Open at localhost:%s", lp)
-	log.Println(command.Output())
-
-	slurp, _ := ioutil.ReadAll(stderr)
-	log.Printf("%s\n", slurp)
 }
