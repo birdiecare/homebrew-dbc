@@ -84,17 +84,6 @@ func FuzzEndpoints(iam bool) string {
 
 		endpoints = endpoints_iam
 	}
-	// if not IAM - remove IAM enabled db endpoints from selection list
-	if !iam {
-		var endpoints_iam []db
-		for _, i := range endpoints {
-			if i.IAM == false {
-				endpoints_iam = append(endpoints_iam, i)
-			}
-		}
-
-		endpoints = endpoints_iam
-	}
 
 	idx, err := fuzzyfinder.Find(
 		endpoints,
