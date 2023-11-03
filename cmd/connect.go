@@ -6,6 +6,7 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/birdiecare/dbc/handler"
 	"github.com/common-nighthawk/go-figure"
@@ -15,7 +16,6 @@ import (
 var host string
 var port string
 var region string
-var user string
 var localport string
 
 // connectCmd represents the connect command
@@ -45,19 +45,15 @@ Then paste your password for $user.
 		// Assert AWS Creds
 		handler.AssertCredentials()
 
-		// if host == "" {
 		dbname, host := handler.FuzzEndpoints()
-		// }
 
-		if user == "" {
-			user, password := handler.FuzzUsers(dbname)
-			fmt.Println(user, password)
-		}
+		user, password := handler.FuzzUsers(dbname)
 
 		myFigure := figure.NewFigure("DBC Connect", "", true)
 		myFigure.Print()
 
 		fmt.Println("")
+		log.Println("Connect with user " + user + " and password " + password)
 
 		// Start Port-Forwarding Session
 		handler.PortForward(region, host, port, localport)
@@ -71,6 +67,5 @@ func init() {
 	connectCmd.Flags().StringVarP(&host, "host", "H", "", "Hostname of the Database to open a connection to. If a hostname is not provided, a fuzzyfind list with be presented to select a database, and subsequently, a user to connect to`")
 	connectCmd.Flags().StringVarP(&port, "port", "p", "5432", "Port of the Datbase to open a connection to (default 5432)")
 	connectCmd.Flags().StringVarP(&region, "region", "r", "eu-west-2", "Region of the Datbase to open a connection to (default eu-west-2)")
-	connectCmd.Flags().StringVarP(&user, "user", "u", "", "The DB User to open a connection with")
 	connectCmd.Flags().StringVarP(&localport, "localport", "l", "5432", "Local Port to forward database connection to (default 5432)")
 }
