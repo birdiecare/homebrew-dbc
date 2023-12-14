@@ -18,10 +18,8 @@ type db struct {
 	IAM       bool
 }
 
-var endpoints []db
-
 // Return DB Type list of Database ClusterId's, InstanceId's and Endpoints.
-func getEndpoints() {
+func getEndpoints() []db {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -44,6 +42,8 @@ func getEndpoints() {
 		log.Fatal(err)
 	}
 
+	var endpoints []db
+
 	// Get clusters
 	for _, i := range cluster_list.DBClusters {
 		endpoints = append(endpoints, db{
@@ -65,25 +65,13 @@ func getEndpoints() {
 			})
 		}
 	}
+
+	return endpoints
 }
 
-func FuzzEndpoints(iam bool) string {
+func FuzzEndpoints() (string, string) {
 
-	var returnEndpoint string
-
-	getEndpoints()
-
-	// if IAM - remove non-IAM enabled db endpoints from selection list
-	if iam {
-		var endpoints_iam []db
-		for _, i := range endpoints {
-			if i.IAM == true {
-				endpoints_iam = append(endpoints_iam, i)
-			}
-		}
-
-		endpoints = endpoints_iam
-	}
+	endpoints := getEndpoints()
 
 	idx, err := fuzzyfinder.Find(
 		endpoints,
@@ -105,12 +93,10 @@ func FuzzEndpoints(iam bool) string {
 	}
 
 	if len(endpoints[idx].Endpoints) > 1 {
-		returnEndpoint = fuzzCluster(endpoints[idx].Endpoints)
-	} else {
-		returnEndpoint = endpoints[idx].Endpoints[0]
+		return endpoints[idx].DBId, fuzzCluster(endpoints[idx].Endpoints)
 	}
 
-	return returnEndpoint
+	return endpoints[idx].DBId, endpoints[idx].Endpoints[0]
 }
 
 func fuzzCluster(e []string) string {
@@ -121,7 +107,7 @@ func fuzzCluster(e []string) string {
 			if i == -1 {
 				return ""
 			}
-			return fmt.Sprintf("Role: %s", isRole(e, i))
+			return fmt.Sprintf("Role: %s", getRole(e, i))
 		}))
 	if err != nil {
 		log.Fatal(err)
@@ -130,7 +116,7 @@ func fuzzCluster(e []string) string {
 	return e[idx]
 }
 
-func isRole(e []string, i int) string {
+func getRole(e []string, i int) string {
 	if e[i] == e[0] {
 		return "Reader"
 	} else {
