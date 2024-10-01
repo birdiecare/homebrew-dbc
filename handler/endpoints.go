@@ -61,7 +61,7 @@ func getEndpoints() {
 				DBId:      *i.DBInstanceIdentifier,
 				Type:      "Instance",
 				Endpoints: []string{*i.Endpoint.Address},
-				IAM:       *&i.IAMDatabaseAuthenticationEnabled,
+				IAM:       *i.IAMDatabaseAuthenticationEnabled,
 			})
 		}
 	}
