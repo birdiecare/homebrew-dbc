@@ -1,5 +1,5 @@
 
-FROM ubuntu:20.04 AS sessionmanagerplugin
+FROM ubuntu:24.04 AS sessionmanagerplugin
 # session manager is not available in alpine, so we grab it from Ubuntu
 ADD https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb .
 RUN dpkg -i "session-manager-plugin.deb"
