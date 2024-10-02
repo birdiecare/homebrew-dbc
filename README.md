@@ -23,6 +23,37 @@ A connection to the specified Database host `-H` will then be available at `loca
 
 `dbc` picks up your configured AWS profile from your environment.
 
+## Use `dbc` in Docker Compose
+
+You can run dbc in a container as part of a docker compose arrangement. This allows you to specifiy a tunnel to a remote database, and have it start up as part of a docker arrangement for your service (or services).
+
+The docker image isn't published yet, so you will need the `homebrew-dbc` repository cloned locally. Then, the docker compose service definition for your tunnel looks like this:
+
+```yaml
+services:
+  # name your service something sensible
+  your-tunnelled-database:
+    build:
+      # This needs to be the location of the homebrew-dbc repo,
+      # relative to this docker-compose file.
+      context: ./homebrew-dbc
+      target: homebrew-dbc
+    environment:
+      # aws ssm will use this to determine which credentials to use from
+      # ~/.aws
+      - AWS_PROFILE=staging-london
+      # The name of the remote db server you want to tunnel to.
+      - HOST=authz.cluster-ro-cpqbmoxjvrwl.eu-west-2.rds.amazonaws.com
+    volumes:
+      # We mount your local .aws folder so that dbc has access to your sso cache.
+      # Run `aws sso login --profile staging-london` before `docker compose up`
+      - ~/.aws:/root/.aws
+    ports:
+      # The container always uses port 5432 for the tunnel,
+      # map it to a suitable host port if you need to access it
+      - 5441:5432
+```
+
 ## Password Authentication
 
 If the database you're connecting to doesn't have AWS IAM Authentication enabled, or doesn't have Users with the `rds_iam` role, you'll need to use a password to authenticate with the DB once your connection is open.
@@ -120,6 +151,23 @@ add a region to the necessary profiles
 ## Exit status `255` / `254`
 
 If you're experiencing trouble opening a session, and you're recieving a `255` error, it's likely due to a missing AWS SSM Plugin installation.
+
+The error looks like this:
+
+```
+2024/09/24 17:15:16 Opening connection for: somedb.cluster-ro-1234.eu-west-2.rds.amazonaws.com
+2024/09/24 17:15:17 Using bastion: i-0e146yababhjklbm
+2024/09/24 17:15:17 Opening connection on localhost:5432
+
+An error occurred (AccessDeniedException) when calling the TerminateSession operation:
+…snip…
+2024/09/24 17:15:18 failed to open port-forwarding connection: exit status 254
+panic: failed to open port-forwarding connection: exit status 254
+
+goroutine 1 [running]:
+log.Panic({0x140002e5768?, 0x1?, 0x1?})
+…snip…
+```
 
 Run this handy script! (Installs the plugin)
 
