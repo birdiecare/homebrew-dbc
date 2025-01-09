@@ -1,4 +1,4 @@
- # Check https://goreleaser.com/customization/env/
+# Check https://goreleaser.com/customization/env/
 env:
   - GO111MODULE=on
   - GOPROXY=https://goproxy.io
@@ -6,8 +6,8 @@ env:
 # Check https://goreleaser.com/customization/hooks/
 before:
   hooks:
-  - go mod download
-  - go mod tidy
+    - go mod download
+    - go mod tidy
 
 # Check https://goreleaser.com/customization/build/
 builds:
@@ -20,8 +20,7 @@ builds:
 
 # Check https://goreleaser.com/customization/archive/
 archives:
-  - 
-    name_template: "birdiecare_dbc_{{ .Version }}_{{ .Os }}_{{ .Arch }}"  
+  - name_template: "birdiecare_dbc_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - README.md
 
@@ -29,9 +28,8 @@ project_name: dbc
 
 # Check https://goreleaser.com/customization/homebrew/
 brews:
-  - 
-    homepage: 'https://github.com/birdicare/homebrew-dbc'
-    description: 'Database Connect'
+  - homepage: "https://github.com/birdicare/homebrew-dbc"
+    description: "Database Connect"
     folder: Formula
     commit_author:
       name: harrywm
@@ -41,3 +39,6 @@ brews:
       name: dbc
     install: |
       bin.install "dbc"
+
+clean:
+  enabled: true
