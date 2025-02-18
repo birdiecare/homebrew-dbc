@@ -10,11 +10,14 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/rds/auth v1.3.4
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.134.0
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
-	github.com/go-sql-driver/mysql v1.7.1
+	github.com/go-sql-driver/mysql v1.9.0
 	github.com/spf13/cobra v1.7.0
 )
 
-require github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.10.1 // indirect
+require (
+	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.10.1 // indirect
+)
 
 require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.1 // indirect
